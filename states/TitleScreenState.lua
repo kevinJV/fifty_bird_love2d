@@ -15,7 +15,7 @@ function TitleScreenState:init()
 end
 
 function TitleScreenState:update(dt)
-    if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') or love.keyboard.wasPressed('space') then
+    if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') or love.keyboard.wasPressed('space') or love.mouse.wasPressed('1') then
         gStateMachine:change('countdown')
     end
 end
@@ -25,7 +25,7 @@ function TitleScreenState:render()
     love.graphics.printf('Fifty Bird', 0, 64, VIRTUAL_WIDTH, 'center')
 
     love.graphics.setFont(mediumFont)
-    love.graphics.printf('Press Enter or Space to start', 0, 100, VIRTUAL_WIDTH, 'center')
+    love.graphics.printf('Touch or Press Enter or Space to start', 0, 100, VIRTUAL_WIDTH, 'center')
 
     love.graphics.setFont(smallFont)
     love.graphics.printf('Modified by Kevin JV', 5, VIRTUAL_HEIGHT - 25, VIRTUAL_WIDTH, 'left')

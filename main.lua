@@ -117,10 +117,17 @@ function love.load()
 
     -- initialize input table
     love.keyboard.keysPressed = {}
+    love.mouse.buttonsPressed = {}
 end
 
 function love.resize(w, h)
     push:resize(w, h)
+end
+
+function love.mousepressed(x, y, button)
+    -- add to our table of keys pressed this frame
+    print("button: "..button)
+    love.mouse.buttonsPressed[tostring(button)] = true
 end
 
 function love.keypressed(key)
@@ -140,6 +147,14 @@ function love.keyboard.wasPressed(key)
     end
 end
 
+function love.mouse.wasPressed(button)
+    if love.mouse.buttonsPressed[button] then
+        return true
+    else
+        return false
+    end
+end
+
 function love.update(dt)
     if scrolling then
         backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
@@ -149,6 +164,7 @@ function love.update(dt)
     gStateMachine:update(dt)
 
     love.keyboard.keysPressed = {}
+    love.mouse.buttonsPressed = {}
 end
 
 function love.draw()

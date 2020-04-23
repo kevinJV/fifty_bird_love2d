@@ -30,7 +30,7 @@ end
 
 function ScoreState:update(dt)
     -- go back to play if enter is pressed
-    if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+    if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') or love.keyboard.wasPressed('space') or love.mouse.wasPressed('1') then
         gStateMachine:change('countdown')
     end
 end
@@ -51,5 +51,5 @@ function ScoreState:render()
         love.graphics.draw(self.gold_medal, VIRTUAL_WIDTH/2 - self.gold_medal:getWidth()/2, VIRTUAL_HEIGHT/2 - self.gold_medal:getHeight()/2)
     end
 
-    love.graphics.printf('Press Enter to Play Again!', 0, 200, VIRTUAL_WIDTH, 'center')
+    love.graphics.printf('Touch or Press Enter or Space to Play Again!', 0, 200, VIRTUAL_WIDTH, 'center')
 end
