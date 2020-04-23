@@ -18,24 +18,53 @@ BIRD_WIDTH = 38
 BIRD_HEIGHT = 24
 
 function PlayState:init()
-    self.bird = Bird()
-    self.pipePairs = {}
-    self.timer = 0
-    self.score = 0
-    self.spawn_time = 2
+    -- we must detect if the playstate was called during a pause o from title
+    if not gPause then
+        -- restar pause var
+        self.bird = Bird()
+        self.pipePairs = {}
+        self.timer = 0
+        self.score = 0
+        self.spawn_time = 2
 
-    -- initialize our last recorded Y value for a gap placement to base other gaps off of
-    self.lastY = -PIPE_HEIGHT + math.random(80) + 20
+        -- initialize our last recorded Y value for a gap placement to base other gaps off of
+        self.lastY = -PIPE_HEIGHT + math.random(80) + 20
+    end
+end
+
+function PlayState:enter(params)
+    -- resume the scroll in case it is false
+    scrolling = true
+
+
+    if gPause then
+        
+        self.bird = params.play_state.bird
+        self.pipePairs = params.play_state.pipePairs
+        self.timer = params.play_state.timer
+        self.score = params.play_state.score
+        self.spawn_time = params.play_state.spawn_time
+        self.lastY = params.play_state.lastY
+    
+        --lets remove the pause VIRTUAL_HEIGHT
+        gPause = false
+    end
 end
 
 function PlayState:update(dt)
+    -- check for pauses
+    if love.keyboard.wasPressed('p') then
+        gStateMachine:change('pause', {
+            play_state = self
+        })
+    end
+
     -- update timer for pipe spawning
     self.timer = self.timer + dt
 
     -- spawn a new pipe pair randomly
     
     if self.timer > self.spawn_time then
-        print(self.spawn_time)
         -- modify the last Y coordinate we placed so pipe gaps aren't too far apart
         -- no higher than 10 pixels below the top edge of the screen,
         -- and no lower than a gap length (90 pixels) from the bottom
@@ -116,14 +145,6 @@ function PlayState:render()
     love.graphics.print('Score: ' .. tostring(self.score), 8, 8)
 
     self.bird:render()
-end
-
---[[
-    Called when this state is transitioned to from another state.
-]]
-function PlayState:enter()
-    -- if we're coming from death, restart scrolling
-    scrolling = true
 end
 
 --[[

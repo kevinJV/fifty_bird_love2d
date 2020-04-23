@@ -16,6 +16,14 @@ COUNTDOWN_TIME = 0.75
 function CountdownState:init()
     self.count = 3
     self.timer = 0
+    self.play_state = {}
+end
+
+function CountdownState:enter(params)
+    -- I have yet to find/investigate a better way to know when params is empty AND/OR null
+    if gPause then
+        self.play_state = params.play_state
+    end
 end
 
 --[[
@@ -31,7 +39,13 @@ function CountdownState:update(dt)
         self.count = self.count - 1
 
         if self.count == 0 then
-            gStateMachine:change('play')
+            if self.play_state == nil then 
+                gStateMachine:change('play')                
+            else
+                gStateMachine:change('play', {
+                    play_state = self.play_state
+                })
+            end
         end
     end
 end
